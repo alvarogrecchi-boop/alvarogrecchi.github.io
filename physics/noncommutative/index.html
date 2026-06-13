@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>noncommutative physics · JETBUNDLE</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <main class="doc">
+        <nav class="subnav" aria-label="section">
+            <a href="../">physics</a>
+            <span class="subnav-sep" aria-hidden="true">·</span>
+            <span class="dim">noncommutative physics</span>
+            <span class="subnav-sep" aria-hidden="true">·</span>
+            <a href="../classical/">classical physics</a>
+            <span class="subnav-sep" aria-hidden="true">·</span>
+            <a href="/">../</a>
+        </nav>
+
+        <header class="doc-header">
+            <h1>noncommutative physics</h1>
+            <p class="doc-lead"><em>landau 3–4 backbone, one algebraic deformation from the classical spine</em></p>
+            <p class="doc-intro">this page assumes you have already walked the unified classical road:
+                <a href="../classical/index.html#b-symplectic">symplectic phase space</a>,
+                <a href="../classical/index.html#e-legendre-hamilton">Poisson brackets and Hamiltonian flow</a>,
+                variational action and Noether data on manifolds, minkowski structure, gauge potentials and curvature,
+                and optionally the <a href="../classical/index.html#bonus-ehresmann-prelude">bundle connection picture</a>.
+                the physical story of landau–lifshitz volumes 3 and 4 is then read as a single forced upgrade: keep the
+                symplectic and variational origin of dynamics, but replace the commutative algebra of classical
+                observables with an operator algebra whose commutators shadow Poisson brackets.</p>
+            <p class="doc-intro">the deformation rule, stated once and reused everywhere it applies, is
+                $\{f,g\}\mapsto \frac{1}{i\hbar}[\hat f,\hat g]$ on a domain of observables where both sides make
+                sense. ordering choices and domain issues are part of the physics, not bugs in the exposition. every
+                arc below traces a consequence: finite-dimensional quantum mechanics, spin and representation theory,
+                relativistic wave equations, field quantization and a QED-shaped skeleton, global quantization when
+                chartwise canonical rules break, worldsheets and conformal data as the same variational DNA in $1{+}1$,
+                then closure and honest pointers where the deformation is not yet finished (UV, full rigorous QFT,
+                measurement philosophy).</p>
+            <p class="doc-intro"><strong>convention:</strong> lorentzian signature matches the classical page,
+                mostly minus $\eta=\mathrm{diag}(-1,1,1,1)$, $x^0=ct$; $\hbar$ is explicit in commutators; field
+                normalizations follow heaviside–lorentz style where QED-style formulas appear.</p>
+        </header>
+
+        <nav class="toc" aria-labelledby="toc-heading">
+            <h2 id="toc-heading" class="toc-title">outline</h2>
+            <ol class="toc-list">
+                <li><a href="#arc-deformation">deformation: Poisson algebra meets measurement</a>
+                    <ul class="toc-list" style="margin-top:0.35rem;margin-bottom:0.5rem;">
+                        <li><a href="#q-joint-spectra">sharp values and joint spectra</a></li>
+                        <li><a href="#q-double-slit">double slit, interference, which-path</a></li>
+                        <li><a href="#q-dirac-map">dirac map: Poisson bracket to commutator</a></li>
+                        <li><a href="#q-robertson-uncertainty">robertson uncertainty from commutators</a></li>
+                        <li><a href="#q-heisenberg-dynamics">heisenberg versus schrödinger picture</a></li>
+                    </ul>
+                </li>
+                <li><a href="#arc-canonical">canonical quantization: Heisenberg algebra to Schrödinger equation</a>
+                    <ul class="toc-list" style="margin-top:0.35rem;margin-bottom:0.5rem;">
+                        <li><a href="#q-heisenberg-algebra">canonical commutators and weyl form</a></li>
+                        <li><a href="#q-stone-von-neumann">stone–von neumann rigidity</a></li>
+                        <li><a href="#q-hilbert-domains">Hilbert space, domains, self-adjointness</a></li>
+                        <li><a href="#q-states-born">states, density matrices, born rule</a></li>
+                        <li><a href="#q-schrodinger">schrödinger equation and unitary evolution</a></li>
+                        <li><a href="#q-variation-schrodinger">deformed variational principle for the wavefunction</a></li>
+                        <li><a href="#q-wkb-hj">WKB and Hamilton–Jacobi recovery</a></li>
+                    </ul>
+                </li>
+                <li><a href="#arc-symmetries-spin">symmetries, angular momentum, spin</a>
+                    <ul class="toc-list" style="margin-top:0.35rem;margin-bottom:0.5rem;">
+                        <li><a href="#q-unitary-symmetry">symmetries as projective unitary representations</a></li>
+                        <li><a href="#q-stone-one-parameter">stone’s theorem and generators</a></li>
+                        <li><a href="#q-so3-ladder">so(3) algebra, ladders, spectra</a></li>
+                        <li><a href="#q-su2-spinors">SU(2) covering SO(3), half-integer spin</a></li>
+                        <li><a href="#q-pauli-bloch">Pauli matrices, Bloch sphere, Stern–Gerlach</a></li>
+                        <li><a href="#q-many-body-tensor">tensor products and composite systems</a></li>
+                    </ul>
+                </li>
+                <li><a href="#arc-relativistic">relativistic extension: Klein–Gordon and Dirac</a>
+                    <ul class="toc-list" style="margin-top:0.35rem;margin-bottom:0.5rem;">
+                        <li><a href="#q-klein-gordon">from mass shell to Klein–Gordon</a></li>
+                        <li><a href="#q-dirac-clifford">Clifford algebra and Dirac equation</a></li>
+                        <li><a href="#q-lorentz-minimal-coupling">Lorentz covariance and minimal coupling</a></li>
+                        <li><a href="#q-antiparticles-fall-center">antiparticles, fall to center, regularity</a></li>
+                    </ul>
+                </li>
+                <li><a href="#arc-field-qed">field quantization and QED-shaped skeleton</a>
+                    <ul class="toc-list" style="margin-top:0.35rem;margin-bottom:0.5rem;">
+                        <li><a href="#q-ccr-car-fock">CCR, CAR, and Fock space</a></li>
+                        <li><a href="#q-ovd-smearing">operator-valued distributions and smearing</a></li>
+                        <li><a href="#q-free-photon-electron">free photon and electron fields</a></li>
+                        <li><a href="#q-qed-gauge-fix">minimal coupling, gauge fixing, QED interaction</a></li>
+                        <li><a href="#q-s-matrix">interaction picture and S-matrix (formal)</a></li>
+                        <li><a href="#q-feynman-skeleton">wick, diagrams, UV as residual issue</a></li>
+                    </ul>
+                </li>
+                <li><a href="#arc-geometric-quantization">global geometric quantization</a>
+                    <ul class="toc-list" style="margin-top:0.35rem;margin-bottom:0.5rem;">
+                        <li><a href="#q-schrodinger-limits">limits of chartwise Schrödinger quantization</a></li>
+                        <li><a href="#q-prequantum-integrality">prequantum line bundle and integrality</a></li>
+                        <li><a href="#q-polarizations">polarizations and half-form correction</a></li>
+                        <li><a href="#q-bohr-sommerfeld">Bohr–Sommerfeld, Maslov, EBK</a></li>
+                        <li><a href="#q-dirac-constraints-q">dirac constraints and gauge reduction (pointer)</a></li>
+                    </ul>
+                </li>
+                <li><a href="#arc-worldsheets">complex structures, sigma models, worldsheets</a>
+                    <ul class="toc-list" style="margin-top:0.35rem;margin-bottom:0.5rem;">
+                        <li><a href="#q-riemann-worldsheet">Riemann surfaces and worldsheet actions</a></li>
+                        <li><a href="#q-conformal-virasoro">conformal symmetry and Virasoro algebra</a></li>
+                        <li><a href="#q-cft-oPE-modular">CFT data: OPE, modular invariance (outline)</a></li>
+                        <li><a href="#q-sigma-models">nonlinear sigma models and target geometry</a></li>
+                    </ul>
+                </li>
+                <li><a href="#arc-closure">interpretation, closure, what this page does not finish</a>
+                    <ul class="toc-list" style="margin-top:0.35rem;margin-bottom:0.5rem;">
+                        <li><a href="#q-one-deformation-table">one deformation, many faces</a></li>
+                        <li><a href="#q-cstar-operational">operator algebras and the operational core</a></li>
+                        <li><a href="#q-microlocal-curved">microlocal QFT on curved spacetime (pointer)</a></li>
+                        <li><a href="#q-rigged-hilbert">rigged Hilbert spaces (pointer)</a></li>
+                        <li><a href="#q-supersymmetry-pointer">supersymmetry as later graded deformation (pointer)</a></li>
+                        <li><a href="#q-out-of-scope">out of scope and next books</a></li>
+                    </ul>
+                </li>
+            </ol>
+        </nav>
+
+        <hr class="doc-rule">
+
+        <article class="doc-body">
+
+            <section id="arc-deformation" class="doc-section">
+                <h2>deformation: Poisson algebra meets measurement</h2>
+                <p>the classical index treats mechanics as a story about <em>composition</em> (symmetries, categories),
+                    <em>selection</em> (stationary action), and <em>bookkeeping</em> (multilinear objects, forms, bundles).
+                    once phase space is symplectic, observables form a commutative poisson algebra and every pure state is
+                    morally a point evaluation: sharp joint values cost nothing algebraically. quantum mechanics is the
+                    same spine with one lie-theoretic edit: the poisson bracket is shadowed by a commutator bracket on a
+                    noncommutative $\ast$-algebra, and measurement is read through spectral measures instead of pointwise
+                    evaluation. this arc makes that edit as explicit as the opening sections of the classical page make
+                    monoids, actions, and euler–lagrange.</p>
+                <p>throughout, keep the classical dictionary in view: $f,g$ on $T^*Q$ commute under pointwise product;
+                    $\{f,g\}$ is the infinitesimal twin of hamiltonian shearing. after deformation, $\hat f,\hat g$ need
+                    not commute; $\frac{\mathrm{i}}{\hbar}[\hat f,\hat g]$ is the quantum twin of $\{f,g\}$ on the largest
+                    subalgebra where the identification is consistent. the double slit and uncertainty are not metaphors
+                    layered on top—they are the failure of commutative spectral calculus that the classical page never had
+                    to confront.</p>
+
+                <p><strong>symplectic coordinates and poisson axioms (classical spine).</strong> on an open chart of
+                    phase space with darboux coordinates $(q^1,\ldots,q^n,p_1,\ldots,p_n)$, use $z=(q,p)\in\mathbb{R}^{2n}$
+                    and the standard symplectic matrix
+                </p>
+                $$
+                J = \begin{pmatrix} 0 & I_n \\ -I_n & 0 \end{pmatrix},\qquad
+                \omega(z,z') = z^{\mathsf T} J z' .
+                $$
+                <p>for smooth observables $f,g$, the <strong>poisson bracket</strong> is
+                </p>
+                $$
+                \{f,g\}
+                = \sum_{i=1}^n\left(
+                \frac{\partial f}{\partial q^i}\frac{\partial g}{\partial p_i}
+                - \frac{\partial f}{\partial p_i}\frac{\partial g}{\partial q^i}
+                \right)
+                = \omega(X_f,X_g),
+                $$
+                <p>where $X_f$ is the hamiltonian vector field defined by $\iota_{X_f}\omega=\mathrm{d}f$. it satisfies
+                    the following axioms for all $f,g,h\in C^\infty$ and constants $a,b$:</p>
+                <ol>
+                    <li><strong>P1 (bilinearity).</strong> $\{af+bg,h\}=a\{f,h\}+b\{g,h\}$ and similarly in the second
+                        slot.</li>
+                    <li><strong>P2 (antisymmetry).</strong> $\{g,f\}=-\{f,g\}$.</li>
+                    <li><strong>P3 (jacobi).</strong>
+                        $\{f,\{g,h\}\}+\{g,\{h,f\}\}+\{h,\{f,g\}\}=0$.</li>
+                    <li><strong>P4 (leibniz).</strong> $\{fg,h\}=f\{g,h\}+\{f,h\}g$.</li>
+                </ol>
+                <p>given a hamiltonian $H$, time evolution of observables along physical trajectories obeys
+                </p>
+                $$
+                \frac{\mathrm{d}f}{\mathrm{d}t}=\{f,H\}.
+                $$
+                <p>a <em>pure classical state</em> $x\in M$ induces an algebra homomorphism
+                    $\mathrm{ev}_x:C^\infty(M,\mathbb{R})\to\mathbb{R}$, $f\mapsto f(x)$, compatible with pointwise
+                    product: $\mathrm{ev}_x(fg)=\mathrm{ev}_x(f)\mathrm{ev}_x(g)$. commutativity of the product is what
+                    allows, at least in idealized language, arbitrarily sharp simultaneous values for any finite list of
+                    independent observables whose level sets meet transversely. the quantum upgrade replaces this by
+                    spectral projectors that need not commute.</p>
+
+                <h3 id="q-joint-spectra">sharp values and joint spectra</h3>
+                <p><strong>postulates (quantum structural, finite-level).</strong> fix a separable complex Hilbert space
+                    $\mathcal{H}$.</p>
+                <ol>
+                    <li><strong>Q1 (observables).</strong> a (real) observable is a self-adjoint operator $A$ with dense
+                        domain $\mathcal{D}(A)\subset\mathcal{H}$ (in applications one constructs a common core
+                        $\mathcal{D}_0$ where algebraic identities are checked, then closes to self-adjoint extensions).</li>
+                    <li><strong>Q2 (pure states).</strong> pure states are rays: nonzero $\psi\in\mathcal{H}$ with
+                        $\psi\sim \lambda\psi$ for $\lambda\in\mathbb{C}^\times$ identified.</li>
+                    <li><strong>Q3 (mixed states).</strong> general states are density operators: positive trace-class
+                        operators $\rho$ with $\mathrm{Tr}\,\rho=1$.</li>
+                    <li><strong>Q4 (expectations).</strong> $\langle A\rangle_\psi=\langle\psi,A\psi\rangle/\langle\psi,\psi\rangle$
+                        for pure states; $\langle A\rangle_\rho=\mathrm{Tr}(\rho A)$ when $A\rho$ is trace-class (e.g.
+                        $A$ bounded or $\rho$ finite-rank on the relevant subspace).</li>
+                </ol>
+                <p><strong>spectral theorem (functional form).</strong> to each self-adjoint $A$ corresponds a unique
+                    projection-valued measure $E_A$ on the Borel $\sigma$-algebra of $\mathbb{R}$ such that
+                </p>
+                $$
+                A = \int_{\mathbb{R}} \lambda\,\mathrm{d}E_A(\lambda),
+                $$
+                <p>with the integral understood in the strong sense on $\mathcal{D}(A)$. for every bounded Borel $g$,
+                </p>
+                $$
+                g(A) = \int_{\mathbb{R}} g(\lambda)\,\mathrm{d}E_A(\lambda)
+                $$
+                <p>defines a bounded operator. the <strong>born rule</strong> assigns to a Borel set $\Delta\subset\mathbb{R}$
+                    the outcome probability
+                </p>
+                $$
+                \mathbb{P}_\psi(A\in\Delta)=\frac{\|E_A(\Delta)\psi\|^2}{\|\psi\|^2},\qquad
+                \mathbb{P}_\rho(A\in\Delta)=\mathrm{Tr}\bigl(\rho\,E_A(\Delta)\bigr),
+                $$
+                <p>for pure and mixed states respectively (under standard trace-class hypotheses).</p>
+                <p><strong>lemma (PVM bookkeeping).</strong> the family $\{E_A(\Delta)\}$ satisfies $E_A(\emptyset)=0$,
+                    $E_A(\mathbb{R})=I$, $E_A(\Delta_1\cap\Delta_2)=E_A(\Delta_1)E_A(\Delta_2)$, and for pairwise disjoint
+                    $\Delta_n$, $E_A(\bigcup_n\Delta_n)=\sum_n E_A(\Delta_n)$ in the strong operator topology. these are
+                    the axioms of a resolution of the identity; they are the quantum replacement for pulling back borel
+                    sets through classical $f:M\to\mathbb{R}$.</p>
+                <p><strong>definition (joint measurability).</strong> self-adjoint $A,B$ are <em>jointly measurable</em> if
+                    their spectral measures strongly commute:
+                </p>
+                $$
+                [E_A(\Delta_1),E_B(\Delta_2)]=0\quad\text{for all Borel }\Delta_1,\Delta_2\subset\mathbb{R}.
+                $$
+                <p>equivalently, $f(A)$ and $g(B)$ commute for all bounded borel $f,g$. under standard regularity
+                    (bounded $A,B$, or polynomially bounded on a joint core with essential self-adjointness of
+                    polynomials), joint measurability is equivalent to $[A,B]=0$ on a dense subspace invariant under both
+                    operators’ bounded functional calculus.</p>
+                <p><strong>proposition (simultaneous diagonalization, statement).</strong> if $A,B$ are commuting
+                    self-adjoint operators on $\mathcal{H}$, there exists a unitary map $\mathcal{H}\cong\int^\oplus
+                    \mathcal{H}(\lambda,\mu)\,\mathrm{d}\nu(\lambda,\mu)$ diagonalizing both: $A$ acts as multiplication
+                    by $\lambda$, $B$ by $\mu$ on each fiber. in particular, when spectra are discrete and multiplicities
+                    finite, there is an orthonormal basis of simultaneous eigenvectors.</p>
+                <p><strong>canonical commutation relations (CCR) on a core.</strong> in one dimension, position and momentum
+                    are modeled by symmetric operators on $\mathcal{D}_0\subset L^2(\mathbb{R},\mathrm{d}x)$ with
+                </p>
+                $$
+                [\hat x,\hat p]=\mathrm{i}\hbar\,\mathbb{I},\qquad
+                \hat x\psi(x)=x\psi(x),\qquad \hat p\psi(x)=-\mathrm{i}\hbar\,\psi'(x).
+                $$
+                <p><strong>lemma (no sharp joint $(x,p)$ in $L^2$).</strong> there is no nonzero $\psi\in L^2(\mathbb{R})$
+                    satisfying both $\hat x\psi=x_0\psi$ and $\hat p\psi=p_0\psi$ for finite $x_0,p_0\in\mathbb{R}$.</p>
+                <p><em>proof.</em> the equation $\hat p\psi=p_0\psi$ forces $\psi(x)=C\,\exp(\mathrm{i}p_0 x/\hbar)$ a.e.,
+                    which has constant modulus $|C|^2$ and cannot be square-integrable unless $C=0$. separately,
+                    $\hat x\psi=x_0\psi$ would require $\psi$ supported at $x_0$ (a delta distribution), which is not an
+                    element of $L^2$. thus the classical idealization of a point in phase space cannot be realized as a
+                    simultaneous pair of proper eigenvectors in the schrödinger representation.</p>
+                <p><strong>remark (continuous spectrum and rigged spaces).</strong> generalized eigenvectors (plane waves,
+                    deltas) live in distributional extensions (gelfand triples); the operational content remains the
+                    projection-valued measure on $\mathcal{H}$. discrete spectra (finite-dimensional subspaces, bound states)
+                    are the setting where “sharp values” look most like finite-dimensional linear algebra, but the joint
+                    measurability criterion is always the commuting of spectral projectors, not the classical existence of
+                    a point in $T^*Q$.</p>
+
+                <h3 id="q-double-slit">double slit, interference, which-path</h3>
+                <p>work in a two-dimensional schematic: transverse coordinate $y$ on a screen, two slits labeled $1,2$.
+                    after preparation, the <em>which-slit</em> degree of freedom is modeled as a two-dimensional subspace
+                    $\mathbb{C}^2=\mathrm{span}\{|1\rangle,|2\rangle\}$ with $\langle i|j\rangle=\delta_{ij}$. a pure
+                    pre-slit transverse state is
+                </p>
+                $$
+                |\psi_{\mathrm{slit}}\rangle=\alpha|1\rangle+\beta|2\rangle,\qquad |\alpha|^2+|\beta|^2=1.
+                $$
+                <p>propagation from slit $j$ to a point $y$ on the screen contributes a complex amplitude $K_j(y)$ (a
+                    green function / propagator evaluated between slit and detector in a fixed approximation). the total
+                    amplitude at $y$ is the coherent sum
+                </p>
+                $$
+                \psi(y)=\alpha K_1(y)+\beta K_2(y).
+                $$
+                <p><strong>lemma (born composition).</strong> the detection density is proportional to
+                </p>
+                $$
+                |\psi(y)|^2
+                =|\alpha|^2|K_1|^2+|\beta|^2|K_2|^2
+                +2\operatorname{Re}\bigl(\alpha^*\beta\,K_1^*K_2\bigr).
+                $$
+                <p><em>proof.</em> expand $|\alpha K_1+\beta K_2|^2$ and group terms.</p>
+                <p>the third term is the <em>interference</em> term; it vanishes if either amplitude $\alpha^*\beta$ is
+                    zero or if the relative phase of $K_1^*K_2$ is washed out. in the far-field approximation with
+                    equal slit–screen optical path length moduli and small diffraction envelope, one often writes
+                    $K_j(y)\propto \mathrm{e}^{\mathrm{i}\phi_j(y)}$ with slowly varying modulus; then the interference
+                    oscillates as $\cos(\phi_2(y)-\phi_1(y)+\arg(\beta/\alpha))$.</p>
+                <p><strong>worked example (symmetric slits).</strong> take $|\alpha|=|\beta|=1/\sqrt{2}$ and
+                    $|K_1(y)|=|K_2(y)|=:A(y)&gt;0$ with $K_1^*K_2=A(y)^2\mathrm{e}^{\mathrm{i}\delta(y)}$. then
+                </p>
+                $$
+                |\psi(y)|^2 = A(y)^2\bigl(1+\cos\delta(y)\bigr)=2A(y)^2\cos^2\bigl(\delta(y)/2\bigr),
+                $$
+                <p>exhibiting perfect fringe visibility when $\delta$ sweeps a range much larger than $2\pi$ across the
+                    screen.</p>
+                <p><strong>which-path coupling (tensor product model).</strong> adjoin an apparatus with orthonormal
+                    readout states $|e_1\rangle,|e_2\rangle$ in $\mathcal{H}_{\mathrm{m}}$ and entangle:
+                </p>
+                $$
+                |\Psi\rangle=\alpha|1\rangle\otimes|e_1\rangle+\beta|2\rangle\otimes|e_2\rangle.
+                $$
+                <p>the reduced density matrix on the slit space after tracing out $\mathcal{H}_{\mathrm{m}}$ is
+                </p>
+                $$
+                \rho_{\mathrm{slit}}
+                =\mathrm{Tr}_{\mathrm{m}}|\Psi\rangle\langle\Psi|
+                =|\alpha|^2|1\rangle\langle 1|+|\beta|^2|2\rangle\langle 2|
+                $$
+                <p>whenever $\langle e_1|e_2\rangle=0$ (orthogonal which-path records). expanding the same amplitudes
+                    with this $\rho$ replaces $|\psi|^2$ by an incoherent sum: cross terms vanish because coherences
+                    $\langle 1|\rho|2\rangle$ are zero.</p>
+                <p><strong>lemma (two-level visibility).</strong> for any $2\times 2$ hermitian density matrix $\rho$ in the
+                    $\{|1\rangle,|2\rangle\}$ basis, define fringe visibility from off-diagonal magnitude:
+                    $V=2|\rho_{12}|/(\rho_{11}+\rho_{22})$ when the denominator is positive. pure superpositions
+                    $|\langle 1|\psi\rangle\langle\psi|2\rangle|$ maximize $|V|$ for fixed diagonal weights; the partial
+                    trace above sets $\rho_{12}=0$ while preserving $\rho_{11}=|\alpha|^2$, $\rho_{22}=|\beta|^2$.</p>
+                <p><strong>remark (complementarity as algebra).</strong> which-path information is correlation with a
+                    commuting subalgebra of the apparatus; complete distinguishability orthogonalizes the records, erasing
+                    coherences in the reduced state. interference reappears only when the joint state remains entangled in a
+                    basis where both slits contribute to the same off-diagonal of the relevant reduced density operator.
+                    this is the same structural obstruction as noncommuting spectral measures: the classical phase-space
+                    point cannot encode both sharp slit label and maximal fringe contrast in one commutative probability
+                    space without enlarging the sample space (here, tensor product structure).</p>
+
+                <h3 id="q-dirac-map">dirac map: Poisson bracket to commutator</h3>
+                <p><strong>definition (dirac quantization map, local form).</strong> fix a darboux chart on
+                    $M=T^*Q$ and let $\mathcal{P}\subset C^\infty(M)$ be a real vector subspace closed under poisson
+                    bracket (a lie subalgebra under $\{\cdot,\cdot\}$). a <em>quantization map</em> is a linear assignment
+                    $f\mapsto \hat f$ from $\mathcal{P}$ to self-adjoint (or hermitian) operators on $\mathcal{H}$ such
+                    that, on a specified dense domain,
+                </p>
+                $$
+                \widehat{\{f,g\}}
+                = \frac{1}{\mathrm{i}\hbar}\,[\hat f,\hat g]
+                $$
+                <p>whenever $f,g,\{f,g\}\in\mathcal{P}$. this is a lie algebra homomorphism from $(\mathcal{P},\{\cdot,\cdot\})$
+                    to $(\mathrm{Op}(\mathcal{H}),\frac{\mathrm{i}}{\hbar}[\cdot,\cdot])$ after restricting to the image.
+                </p>
+                <p><strong>proposition (heisenberg algebra is consistent).</strong> let $\mathcal{P}_2$ be real
+                    polynomials in $(q,p)$ of degree at most two. there exists an quantization map on $\mathcal{P}_2$
+                    with $\hat q,\hat p$ the standard operators and $\widehat{q^2}=\hat q^2$, $\widehat{p^2}=\hat p^2$,
+                    $\widehat{qp}=\frac12(\hat q\hat p+\hat p\hat q)$, satisfying the exact dirac identity for all pairs
+                    in $\mathcal{P}_2$.</p>
+                <p><em>verification (quadratic sample).</em> classically $\{q^2,p\}=2q$. quantum mechanically, using
+                    $[\hat q,\hat p]=\mathrm{i}\hbar\,\mathbb{I}$,
+                </p>
+                $$
+                [\hat q^2,\hat p]
+                =\hat q[\hat q,\hat p]+[\hat q,\hat p]\hat q
+                =2\mathrm{i}\hbar\,\hat q,
+                \qquad\text{hence}\qquad
+                \frac{1}{\mathrm{i}\hbar}[\hat q^2,\hat p]=2\hat q=\widehat{\{q^2,p\}}.
+                $$
+                <p>similar checks cover all generators of $\mathcal{P}_2$; the symmetric (weyl) ordering for $\widehat{qp}$
+                    is forced if one insists on hermitian $\widehat{qp}$ and consistency with linear assignments.</p>
+                <p><strong>theorem (Groenewold–van Hove, statement).</strong> there is no linear quantization map from the
+                    full lie algebra of all polynomials in $(q,p)$ to operators satisfying the exact dirac identity for
+                    every pair and agreeing with the schrödinger representation on $\mathcal{P}_2$. in short, <em>no
+                        universal polynomial quantization functor</em> exists; ordering is extra data.</p>
+                <p><strong>remark (deformation quantization / Moyal, one line of algebra).</strong> the weyl symbol map
+                    identifies polynomials with operators; the product of symbols is deformed to the <em>moyal
+                        star-product</em> $f\star g$ with
+                </p>
+                $$
+                f\star g - g\star f = \mathrm{i}\hbar\,\{f,g\} + O(\hbar^3)
+                $$
+                <p>in the semiclassical expansion for polynomials (the $\hbar^2$ term already encodes ordering choices).
+                    this packages the dirac map inside an associative but noncommutative product on a function space,
+                    parallel to how the classical page packages dynamics inside the poisson bracket’s derivation property
+                    P4.</p>
+                <p><strong>leading deformation identities (boxed for reuse).</strong> matching the classical canonical
+                    brackets,
+                </p>
+                $$
+                \boxed{\;
+                \{q^i,p_j\}=\delta^i_j
+                \;\longleftrightarrow\;
+                [\hat q^i,\hat p_j]=\mathrm{i}\hbar\,\delta^i_j,\qquad
+                [\hat q^i,\hat q^j]=[\hat p_i,\hat p_j]=0
+                \;}
+                $$
+                <p>and for dynamics, the dirac analogy continues in the heisenberg equation derived below:
+                    $\mathrm{d}\hat f/\mathrm{d}t=\frac{\mathrm{i}}{\hbar}[\hat H,\hat f]$ versus
+                    $\mathrm{d}f/\mathrm{d}t=\{H,f\}$.</p>
+
+                <h3 id="q-robertson-uncertainty">robertson uncertainty from commutators</h3>
+                <p><strong>definition (dispersion).</strong> for a self-adjoint $A$ and a unit vector
+                    $\psi\in\mathcal{D}(A^2)$, set $\langle A\rangle=\langle\psi,A\psi\rangle$ and
+                </p>
+                $$
+                (\Delta A)^2=\langle(A-\langle A\rangle\mathbb{I})^2\rangle=\|A_0\psi\|^2,\qquad A_0=A-\langle A\rangle\mathbb{I}.
+                $$
+                <p><strong>theorem (Robertson).</strong> let $A,B$ be self-adjoint and $\psi\in\mathcal{D}(AB)\cap\mathcal{D}(BA)$
+                    with $\|\psi\|=1$. then
+                </p>
+                $$
+                \boxed{\;
+                \Delta A\,\Delta B\;\geq\;\frac{1}{2}\,\bigl|\langle [A,B]\rangle\bigr|
+                \;}
+                $$
+                <p>where $\langle[A,B]\rangle=\langle\psi,[A,B]\psi\rangle$.</p>
+                <p><em>proof.</em> with $A_0,B_0$ centered, self-adjointness gives
+                    $\langle\psi,[A_0,B_0]\psi\rangle=\langle A_0\psi,B_0\psi\rangle-\langle B_0\psi,A_0\psi\rangle
+                    =2\mathrm{i}\,\operatorname{Im}\langle A_0\psi,B_0\psi\rangle$. hence
+                    $|\langle[A_0,B_0]\rangle|\leq 2|\langle A_0\psi,B_0\psi\rangle|$. Cauchy–Schwarz yields
+                    $|\langle A_0\psi,B_0\psi\rangle|\leq\|A_0\psi\|\,\|B_0\psi\|=\Delta A\,\Delta B$. finally
+                    $[A_0,B_0]=[A,B]$ because scalars commute. combine to obtain the claim.</p>
+                <p><strong>corollary (Heisenberg–Kennard for one mode).</strong> for $[\hat x,\hat p]=\mathrm{i}\hbar\,\mathbb{I}$,
+                </p>
+                $$
+                \Delta x\,\Delta p\geq \frac{\hbar}{2}.
+                $$
+                <p><strong>theorem (Schrödinger / Robertson combined cleanly).</strong> with $\{A_0,B_0\}=A_0B_0+B_0A_0$,
+                </p>
+                $$
+                (\Delta A)^2(\Delta B)^2
+                \geq
+                \frac{1}{4}\bigl|\langle[A,B]\rangle\bigr|^2
+                +\frac{1}{4}\bigl|\langle\{A_0,B_0\}\rangle\bigr|^2.
+                $$
+                <p><em>proof.</em> Cauchy–Schwarz on $A_0\psi$ and $B_0\psi$ gives $|\langle A_0B_0\rangle|\leq \Delta A\,\Delta B$.
+                    expand $A_0B_0=\tfrac12\{A_0,B_0\}+\tfrac12[A_0,B_0]$; for self-adjoint $A_0,B_0$,
+                    $\langle\{A_0,B_0\}\rangle\in\mathbb{R}$ and
+                    $\langle[A_0,B_0]\rangle=\langle A_0B_0\rangle-\overline{\langle A_0B_0\rangle}=2\mathrm{i}\,\operatorname{Im}\langle A_0B_0\rangle$,
+                    hence
+                    $|\langle A_0B_0\rangle|^2
+                    =(\operatorname{Re}\langle A_0B_0\rangle)^2+(\operatorname{Im}\langle A_0B_0\rangle)^2
+                    =\tfrac14\langle\{A_0,B_0\}\rangle^2+\tfrac14|\langle[A,B]\rangle|^2$.
+                    combine with Cauchy–Schwarz. robertson follows by dropping the nonnegative anticommutator term.</p>
+                <p><strong>worked example (gaussian saturates $\Delta x\,\Delta p=\hbar/2$).</strong> take the normalized
+                    state
+                </p>
+                $$
+                \psi(x)=\left(\frac{1}{2\pi\sigma^2}\right)^{1/4}\exp\!\Bigl(-\frac{x^2}{4\sigma^2}\Bigr)
+                \in L^2(\mathbb{R},\mathrm{d}x).
+                $$
+                <p>then $\Delta x=\sigma$ and a fourier transform gives $\Delta p=\hbar/(2\sigma)$, hence
+                    $\Delta x\,\Delta p=\hbar/2$. equality in the robertson step of the proof forces collinearity of
+                    $A_0\psi$ and $B_0\psi$; gaussians (translated in $x$ and boosted in momentum by phase) exhaust the
+                    minimizers in one dimension.</p>
+
+                <h3 id="q-heisenberg-dynamics">heisenberg versus schrödinger picture</h3>
+                <p>let $\hat H$ be self-adjoint and time-independent. stone’s theorem guarantees a strongly continuous
+                    one-parameter unitary group with generator $\hat H$; write
+                </p>
+                $$
+                \hat U(t)=\exp\!\Bigl(-\frac{\mathrm{i}}{\hbar}t\hat H\Bigr).
+                $$
+                <p><strong>Schrödinger picture.</strong> states evolve, operators fixed:
+                </p>
+                $$
+                |\psi(t)\rangle=\hat U(t)|\psi(0)\rangle,\qquad
+                \mathrm{i}\hbar\,\frac{\mathrm{d}}{\mathrm{d}t}|\psi(t)\rangle=\hat H|\psi(t)\rangle
+                $$
+                <p>on $\mathcal{D}(\hat H)$.</p>
+                <p><strong>Heisenberg picture.</strong> states fixed, operators evolve:
+                </p>
+                $$
+                \hat A_H(t)=\hat U(t)^\dagger\,\hat A\,\hat U(t).
+                $$
+                <p><strong>lemma (expectation equivalence).</strong> for all $t$ and bounded $\hat A$ (more generally on
+                    domains preserved by $\hat U(t)$),
+                </p>
+                $$
+                \langle\psi(t)|\hat A|\psi(t)\rangle=\langle\psi(0)|\hat A_H(t)|\psi(0)\rangle.
+                $$
+                <p><em>proof.</em> substitute $|\psi(t)\rangle=\hat U(t)|\psi(0)\rangle$ and use unitarity
+                    $\hat U^\dagger\hat U=I$.</p>
+                <p><strong>computation (Heisenberg equation).</strong> differentiate strongly on a core (formally,
+                    product rule):
+                </p>
+                $$
+                \frac{\mathrm{d}}{\mathrm{d}t}\hat A_H(t)
+                =\frac{\mathrm{d}\hat U^\dagger}{\mathrm{d}t}\hat A\hat U+\hat U^\dagger\hat A\frac{\mathrm{d}\hat U}{\mathrm{d}t}.
+                $$
+                <p>since $\mathrm{d}\hat U/\mathrm{d}t=-\frac{\mathrm{i}}{\hbar}\hat H\hat U$ and
+                    $\mathrm{d}\hat U^\dagger/\mathrm{d}t=\frac{\mathrm{i}}{\hbar}\hat U^\dagger\hat H$,
+                </p>
+                $$
+                \frac{\mathrm{d}\hat A_H}{\mathrm{d}t}
+                =\frac{\mathrm{i}}{\hbar}\hat U^\dagger(\hat H\hat A-\hat A\hat H)\hat U
+                =\frac{\mathrm{i}}{\hbar}\,[\hat H,\hat A_H(t)].
+                $$
+                <p>thus
+                </p>
+                $$
+                \boxed{\;
+                \frac{\mathrm{d}\hat A_H}{\mathrm{d}t}
+                =\frac{\mathrm{i}}{\hbar}\,[\hat H,\hat A_H(t)]
+                \;}
+                $$
+                <p>on the appropriate domain. this mirrors $\mathrm{d}f/\mathrm{d}t=\{H,f\}$ with the dirac substitution
+                    $\{\cdot,\cdot\}\mapsto \frac{\mathrm{i}}{\hbar}[\cdot,\cdot]$ on the lie subalgebra where quantization
+                    is exact.</p>
+                <p><strong>corollary (Ehrenfest, schrödinger form).</strong> for $\psi(t)$ solving the schrödinger equation
+                    and $\hat A$ time-independent in the schrödinger picture,
+                </p>
+                $$
+                \frac{\mathrm{d}}{\mathrm{d}t}\langle\hat A\rangle
+                =\frac{\mathrm{i}}{\hbar}\,\langle[\hat H,\hat A]\rangle,
+                $$
+                <p>with the expectation taken in $|\psi(t)\rangle$. for mixed $\rho(t)=\hat U(t)\rho(0)\hat U(t)^\dagger$,
+                    $\frac{\mathrm{d}}{\mathrm{d}t}\mathrm{Tr}(\rho\hat A)
+                    =\frac{\mathrm{i}}{\hbar}\mathrm{Tr}(\rho[\hat H,\hat A])$ under trace-class hypotheses.</p>
+                <p><strong>interaction picture (pointer).</strong> split $\hat H=\hat H_0+\hat V$ and set
+                    $\hat U_0(t)=\exp(-\mathrm{i}t\hat H_0/\hbar)$. operators carry free evolution,
+                    $\hat A_I(t)=\hat U_0(t)^\dagger\hat A\hat U_0(t)$, while states solve
+                    $\mathrm{i}\hbar\,\partial_t|\psi_I(t)\rangle=\hat V_I(t)|\psi_I(t)\rangle$ with
+                    $\hat V_I(t)=\hat U_0(t)^\dagger\hat V\hat U_0(t)$. this is the bookkeeping behind time-dependent
+                    perturbation theory and dyson series in later arcs.</p>
+                <p><strong>worked example (harmonic oscillator ladder in Heisenberg).</strong> for
+                    $\hat H=\hbar\omega(\hat a^\dagger\hat a+\tfrac12)$ with $[\hat a,\hat a^\dagger]=\mathbb{I}$, the
+                    Heisenberg equations
+                    $\mathrm{d}\hat a/\mathrm{d}t=\frac{\mathrm{i}}{\hbar}[\hat H,\hat a]$ and
+                    $[\hat H,\hat a]=-\hbar\omega\hat a$ give
+                </p>
+                $$
+                \hat a_H(t)=\mathrm{e}^{-\mathrm{i}\omega t}\hat a(0),\qquad
+                \hat a^\dagger_H(t)=\mathrm{e}^{\mathrm{i}\omega t}\hat a^\dagger(0),
+                $$
+                <p>so $\hat x_H(t)\propto \hat a_H+\hat a_H^\dagger$ oscillates at frequency $\omega$ while vector states
+                    in the schrödinger picture need not move if prepared in an energy eigenstate—two faces of the same
+                    unitary evolution, exactly as the classical page’s hamiltonian flow can be read either on observables
+                    or on initial points once a symplectomorphism is fixed.</p>
+            </section>
+
+            <section id="arc-canonical" class="doc-section">
+                <h2>canonical quantization: Heisenberg algebra to Schrödinger equation</h2>
+                <p>the deformation arc replaced commutative phase-space evaluation by spectral measures and
+                    noncommutative products. this arc pins down the <em>unique</em> irreducible unitary model of
+                    finitely many canonical degrees of freedom, builds the concrete $L^2$ realization, packages states
+                    and the born rule as trace data, derives dynamics from a self-adjoint hamiltonian, and closes the
+                    loop: a variational principle on the wavefunction and the WKB phase recover hamilton–jacobi
+                    structure in the $\hbar\to 0$ front of the same equations. the logical order is lie algebra and
+                    weyl form $\to$ stone–von neumann rigidity $\to$ domains and self-adjointness $\to$ states and born
+                    $\to$ schrödinger flow $\to$ lagrangian field form $\to$ classical limit.</p>
+                <p>throughout, $n$ counts independent canonical pairs $(\hat q_j,\hat p_j)$. tensor products reduce
+                    multiparticle euclidean models to $n=3N$ with permutation symmetry added later when identical
+                    particles matter; here the emphasis is structural, not combinatorics of particle labels.</p>
+
+                <h3 id="q-heisenberg-algebra">canonical commutators and weyl form</h3>
+                <p><strong>heisenberg lie algebra (degree $n$).</strong> abstract generators $Q_j,P_k$ and central
+                    $Z$ over $\mathbb{R}$ with brackets
+                </p>
+                $$
+                [Q_j,P_k]=\delta_{jk}Z,\qquad [Q_j,Q_k]=[P_j,P_k]=[Q_j,Z]=[P_j,Z]=0.
+                $$
+                <p>for a unitary representation on $\mathcal{H}$, one arranges $Z\mapsto \mathrm{i}\hbar\,\mathbb{I}$,
+                    producing the <strong>canonical commutation relations (CCR)</strong>
+                </p>
+                $$
+                [\hat q_j,\hat p_k]=\mathrm{i}\hbar\,\delta_{jk}\,\mathbb{I},\qquad
+                [\hat q_j,\hat q_k]=[\hat p_j,\hat p_k]=0,
+                $$
+                <p>understood on a common dense domain where all compositions needed are defined. the algebra is a
+                    <em>central extension</em> of the abelian $2n$-dimensional lie algebra of classical positions and
+                    momenta: the bracket remembers $\hbar$ as a central charge invisible to classical poisson brackets
+                    alone.</p>
+                <p><strong>weyl unitaries (integrated CCR).</strong> exponentiation avoids the pathology that formal
+                    power series for $\exp(\hat q)$ need not yield bounded operators on $\mathcal{H}$. for real
+                    $a^j,b_k$, define
+                </p>
+                $$
+                U(\mathbf{a})=\exp\!\Bigl(-\frac{\mathrm{i}}{\hbar}\,\mathbf{a}\cdot\hat{\mathbf{p}}\Bigr),\qquad
+                V(\mathbf{b})=\exp\!\Bigl(\frac{\mathrm{i}}{\hbar}\,\mathbf{b}\cdot\hat{\mathbf{q}}\Bigr),
+                $$
+                <p>so that in the schrödinger representation $U(\mathbf{a})$ implements translation in position,
+                    $(U(\mathbf{a})\psi)(x)=\psi(x-\mathbf{a})$. with $[\hat q_j,\hat p_k]=\mathrm{i}\hbar\,\delta_{jk}$ one has
+                    $[\hat p_j,\hat q_k]=-\mathrm{i}\hbar\,\delta_{jk}$, hence
+                    $[\mathbf{a}\cdot\hat{\mathbf{p}},\mathbf{b}\cdot\hat{\mathbf{q}}]
+                    =-\mathrm{i}\hbar\,\mathbf{a}\cdot\mathbf{b}\,\mathbb{I}$, central. for
+                    $A=-\mathrm{i}a\hat p/\hbar$ and $B=\mathrm{i}b\hat q/\hbar$,
+                    $[A,B]=-\mathrm{i}ab/\hbar\,\mathbb{I}$. the baker–campbell–hausdorff formula truncates, giving the
+                    <strong>weyl relations</strong>
+                </p>
+                $$
+                U(\mathbf{a})V(\mathbf{b})
+                =\exp\bigl(-\tfrac{\mathrm{i}}{\hbar}\,\mathbf{a}\cdot\mathbf{b}\bigr)\,
+                V(\mathbf{b})U(\mathbf{a}).
+                $$
+                <p><em>verification ($n=1$).</em> with $A,B$ as above, $\mathrm{e}^A\mathrm{e}^B=\mathrm{e}^{A+B}\mathrm{e}^{[A,B]/2}$
+                    and $\mathrm{e}^B\mathrm{e}^A=\mathrm{e}^{A+B}\mathrm{e}^{-[A,B]/2}$, so
+                    $\mathrm{e}^A\mathrm{e}^B=\mathrm{e}^{[A,B]}\mathrm{e}^B\mathrm{e}^A
+                    =\mathrm{e}^{-\mathrm{i}ab/\hbar}\mathrm{e}^B\mathrm{e}^A$, i.e.
+                    $U(a)V(b)=\mathrm{e}^{-\mathrm{i}ab/\hbar}V(b)U(a)$.</p>
+                <p>the map $(\mathbf{a},\mathbf{b},c)\mapsto \mathrm{e}^{\mathrm{i}c/\hbar}V(\mathbf{b})U(\mathbf{a})$
+                    realizes the <strong>heisenberg group</strong> in $2n+1$ parameters; the weyl relations are the
+                    group multiplication law in exponential coordinates. finite-dimensional unitary representations of
+                    this group force $\hbar=0$ (vanishing central phase), so nontrivial quantum mechanics lives only on
+                    infinite-dimensional $\mathcal{H}$.</p>
+                <p><strong>boxed summary.</strong>
+                </p>
+                $$
+                \boxed{\;
+                [\hat q_j,\hat p_k]=\mathrm{i}\hbar\,\delta_{jk}\mathbb{I}
+                \;\;\Longleftrightarrow\;\;
+                U(\mathbf{a})V(\mathbf{b})
+                =\mathrm{e}^{-\mathrm{i}\mathbf{a}\cdot\mathbf{b}/\hbar}V(\mathbf{b})U(\mathbf{a})
+                \;}
+                $$
+                <p>on the domain where the unitary one-parameter groups are defined.</p>
+
+                <h3 id="q-stone-von-neumann">stone–von neumann rigidity</h3>
+                <p><strong>theorem (stone–von neumann, qualitative form).</strong> fix $n&lt;\infty$. every strongly
+                    continuous irreducible unitary representation of the weyl relations on separable $\mathcal{H}$ is
+                    unitarily equivalent to the <strong>schrödinger representation</strong> on
+                    $\mathcal{H}=L^2(\mathbb{R}^n,\mathrm{d}^nx)$ with
+                </p>
+                $$
+                (\hat q_j\psi)(x)=x_j\psi(x),\qquad
+                (\hat p_k\psi)(x)=-\mathrm{i}\hbar\,\frac{\partial\psi}{\partial x_k}(x),
+                $$
+                <p>for $\psi$ in the standard domain (e.g. schwartz space $\mathcal{S}(\mathbb{R}^n)$ as a core).</p>
+                <p><strong>what the theorem buys.</strong> classically, darboux charts are unique only up to
+                    symplectomorphism—many equivalent models of the same mechanical system. quantum mechanically, once
+                    the weyl form of CCR is fixed and irreducibility is imposed (no superselection sectors mixing
+                    different values of $\hbar$, no hidden factoring of the Hilbert space), the representation is rigid:
+                    there is essentially one Hilbert-space realization of $n$ canonical pairs. this is the precise
+                    sense in which “quantizing $\mathbb{R}^{2n}$” is not a gauge choice like picking coordinates on
+                    $T^*Q$.</p>
+                <p><strong>hypotheses matter.</strong> the statement fails or weakens if $n=\infty$ (field theory:
+                    inequivalent Fock vacua), if one abandons strong continuity (pathological unbounded representations),
+                    or if reducible representations are allowed (direct sums of copies). for atomic-scale QM with
+                    finitely many degrees of freedom, the schrödinger picture is not optional decoration—it is the unique
+                    irreducible unitary spine.</p>
+                <p><strong>remark (projective representations).</strong> phases $\exp(\mathrm{i}\theta(\mathbf{a},\mathbf{b}))$
+                    in group multiplication define a $U(1)$ central extension classified by the commutation cocycle
+                    $\exp(-\mathrm{i}\mathbf{a}\cdot\mathbf{b}/\hbar)$; stone–von neumann classifies these projective
+                    reps of the translation subgroup of phase space.</p>
+
+                <h3 id="q-hilbert-domains">Hilbert space, domains, self-adjointness</h3>
+                <p><strong>schrödinger representation.</strong> take $\mathcal{H}=L^2(\mathbb{R}^n,\mathrm{d}^nx)$ with
+                    lebesgue measure. multiplication by $x_j$ is densely defined and essentially self-adjoint on
+                    $\mathcal{S}(\mathbb{R}^n)$; differentiation $\partial/\partial x_k$ with the factor
+                    $-\mathrm{i}\hbar$ yields the momentum operator symmetric on $\mathcal{S}(\mathbb{R}^n)$ and again
+                    essentially self-adjoint there. fourier transform $\mathcal{F}:L^2(\mathbb{R}^n)\to L^2(\mathbb{R}^n)$
+                    intertwines the two pictures:
+                </p>
+                $$
+                \mathcal{F}\hat q_j\mathcal{F}^{-1}=\mathrm{i}\hbar\,\frac{\partial}{\partial p_j},\qquad
+                \mathcal{F}\hat p_k\mathcal{F}^{-1}=p_k\ \text{(multiplication)},
+                $$
+                <p>up to conventional sign choices in the transform normalization.</p>
+                <p><strong>symmetric versus self-adjoint.</strong> an operator $A$ with dense domain $\mathcal{D}(A)$ is
+                    <em>symmetric</em> if $\langle\phi,A\psi\rangle=\langle A\phi,\psi\rangle$ for all
+                    $\phi,\psi\in\mathcal{D}(A)$. it is <em>self-adjoint</em> if $A=A^\dagger$ with domains matched by the
+                    adjoint definition. only self-adjoint generators guarantee strongly continuous unitary groups
+                    $U(t)=\exp(-\mathrm{i}tA/\hbar)$ via spectral calculus. a symmetric operator may admit multiple
+                    self-adjoint extensions (deficiency indices nonzero) or none; each extension is a different physics
+                    choice (boundary conditions at singular endpoints).</p>
+                <p><strong>example (harmonic oscillator).</strong> on $\mathbb{R}$, $\hat H=\frac{\hat p^2}{2m}
+                    +\frac{m\omega^2}{2}\hat q^2$ is essentially self-adjoint on $\mathcal{S}(\mathbb{R})$; the
+                    spectrum is discrete $\{(n+\tfrac12)\hbar\omega\}_{n\geq 0}$ with hermite eigenfunctions. the
+                    domain issue is benign because confinement is built into the potential.</p>
+                <p><strong>example (free particle).</strong> $\hat H_0=\hat p^2/(2m)$ is essentially self-adjoint on
+                    $\mathcal{S}(\mathbb{R}^n)$; spectrum $[0,\infty)$ is continuous. plane waves are generalized
+                    eigenfunctions, not elements of $L^2$.</p>
+                <p><strong>counterpoint (half-line).</strong> on $L^2((0,\infty))$, the laplacian admits a family of
+                    self-adjoint extensions (robin / dirichlet boundary data); different extensions are different
+                    dynamics. this is the analytic face of “choice of polarization / boundary condition” that geometric
+                    quantization makes global.</p>
+                <p><strong>lemma (core criterion, statement).</strong> if $A$ is symmetric and $\mathcal{D}_0\subset\mathcal{D}(A)$
+                    is dense, and the closure of $A|_{\mathcal{D}_0}$ is self-adjoint, then $\mathcal{D}_0$ is a <em>core</em>
+                    for $A$. nelson’s theorem: if a symmetric $A$ has a dense subspace of analytic vectors, $A$ is
+                    essentially self-adjoint; this is the standard shortcut for representations of finite-dimensional
+                    lie algebras generated by angular momentum or harmonic-oscillator mode operators.</p>
+
+                <h3 id="q-states-born">states, density matrices, born rule</h3>
+                <p><strong>axioms (states).</strong></p>
+                <ol>
+                    <li><strong>S1 (convexity).</strong> states are positive, normalized linear functionals $\omega$ on a
+                        suitable operator algebra containing observables; convex combinations $t\omega_1+(1-t)\omega_2$
+                        are states for $t\in[0,1]$.</li>
+                    <li><strong>S2 (GNS for $C^\ast$-algebras, pointer).</strong> every state arises as a vector state
+                        in some cyclic representation; for type-I factors with separable $\mathcal{H}$, this reduces
+                        to density matrices below.</li>
+                </ol>
+                <p><strong>density matrices.</strong> a <em>density operator</em> is a positive trace-class operator
+                    $\rho$ on $\mathcal{H}$ with $\mathrm{Tr}\,\rho=1$. it defines
+                </p>
+                $$
+                \omega_\rho(A)=\mathrm{Tr}(\rho A)
+                $$
+                <p>for bounded $A$ (extend to unbounded under domain hypotheses). <strong>pure states</strong> satisfy
+                    $\rho^2=\rho$ with $\mathrm{rank}\,\rho=1$, equivalently $\rho=|\psi\rangle\langle\psi|$ for a unit
+                    vector. <strong>mixed states</strong> are nontrivial convex combinations of pure states; then
+                    $\mathrm{Tr}\,\rho^2&lt;1$.</p>
+                <p><strong>born rule (spectral form).</strong> for a self-adjoint observable $A$ with PVM $E_A$,
+                </p>
+                $$
+                \mathbb{P}_\rho(A\in\Delta)=\mathrm{Tr}\bigl(\rho\,E_A(\Delta)\bigr).
+                $$
+                <p>for pure $\rho=|\psi\rangle\langle\psi|$, this reduces to $\|E_A(\Delta)\psi\|^2$. expectations obey
+                </p>
+                $$
+                \langle A\rangle_\rho=\mathrm{Tr}(\rho A)=\int_{\mathbb{R}}\lambda\,\mathrm{d}\mu_\rho(\lambda),\qquad
+                \mu_\rho(\Delta)=\mathrm{Tr}(\rho E_A(\Delta)).
+                $$
+                <p><strong>remark (classical contrast without phase-space measures).</strong> a classical mixed state
+                    on $T^*Q$ is often a probability density $\rho_{\mathrm{cl}}(q,p)$ evolved by liouville; expectations
+                    are $\int f\,\rho_{\mathrm{cl}}\,\mathrm{d}\mu_{\mathrm{Liouville}}$. quantum linearity allows
+                    superpositions $|\psi_1\rangle+|\psi_2\rangle$ whose interference cannot be reproduced by any
+                    nonnegative $\rho_{\mathrm{cl}}$ alone—this is the same obstruction already visible in the double-slit
+                    density-matrix discussion.</p>
+                <p><strong>preview (wigner quasiprobability).</strong> the wigner transform linearly maps $\rho$ to a
+                    real phase-space function $W_\rho(q,p)$ integrating to $1$, but $W_\rho$ need not be pointwise
+                    nonnegative; only the marginals recover quantum position and momentum statistics. this packages
+                    complementarity in a single scalar field at the cost of losing classical probability interpretation.</p>
+
+                <h3 id="q-schrodinger">schrödinger equation and unitary evolution</h3>
+                <p>let $\hat H$ be self-adjoint on $\mathcal{H}$. stone’s theorem for one-parameter unitary groups
+                    provides a unique strongly continuous $U(t)$ with generator $-\hat H/\hbar$ in the convention used
+                    here:
+                </p>
+                $$
+                \hat U(t)=\exp\!\Bigl(-\frac{\mathrm{i}}{\hbar}t\hat H\Bigr),\qquad
+                |\psi(t)\rangle=\hat U(t)|\psi(0)\rangle.
+                $$
+                <p>for $|\psi(0)\rangle\in\mathcal{D}(\hat H)$, differentiation gives the <strong>schrödinger
+                        equation</strong>
+                </p>
+                $$
+                \boxed{\;
+                \mathrm{i}\hbar\,\frac{\mathrm{d}}{\mathrm{d}t}|\psi(t)\rangle=\hat H|\psi(t)\rangle
+                \;}
+                $$
+                <p>in the strong sense on $\mathcal{D}(\hat H)$. for time-dependent $\hat H(t)$, the same abstract
+                    equation holds with $\hat H(t)$ inserted if domains are compatible; the formal solution is a
+                    time-ordered exponential.</p>
+                <p><strong>continuity equation (position representation, one particle).</strong> for
+                    $\hat H=\frac{1}{2m}\hat p^2+V(\hat q)$ and $\psi\in\mathcal{S}$, define the probability density
+                    $\rho=|\psi|^2$ and current
+                </p>
+                $$
+                \mathbf{j}=\frac{\hbar}{2m\mathrm{i}}(\psi^*\nabla\psi-\psi\nabla\psi^*)
+                =\frac{1}{m}\operatorname{Re}(\psi^*\hat{\mathbf{p}}\psi).
+                $$
+                <p>then schrödinger implies
+                </p>
+                $$
+                \frac{\partial\rho}{\partial t}+\nabla\cdot\mathbf{j}=0,
+                $$
+                <p>so total probability is conserved when boundary terms vanish—unitarity in differential form.</p>
+                <p><strong>stationary states and spectral resolution.</strong> if $\hat H\psi_E=E\psi_E$, then
+                    $|\psi(t)\rangle=\mathrm{e}^{-\mathrm{i}Et/\hbar}|\psi_E\rangle$. general solutions superpose
+                    spectral modes:
+                </p>
+                $$
+                |\psi(t)\rangle=\int_{\mathbb{R}}\mathrm{e}^{-\mathrm{i}Et/\hbar}\,\mathrm{d}E_H(E)|\psi(0)\rangle,
+                $$
+                <p>with $E_H$ the spectral measure of $\hat H$. this is the quantum analogue of decomposing classical
+                    motion into action-angle modes, except frequencies $E/\hbar$ are quantized or continuous according
+                    to $\mathrm{spec}(\hat H)$.</p>
+
+                <h3 id="q-variation-schrodinger">deformed variational principle for the wavefunction</h3>
+                <p>treat $\psi(t,x)$ and $\psi^*(t,x)$ as independent complex fields on $\mathbb{R}\times\mathbb{R}^n$
+                    (schwartz in $x$ for integration by parts). consider the action
+                </p>
+                $$
+                S[\psi,\psi^*]=\int_{t_1}^{t_2}\!\int_{\mathbb{R}^n}\mathcal{L}\,\mathrm{d}^nx\,\mathrm{d}t,\qquad
+                \mathcal{L}
+                =\frac{\mathrm{i}\hbar}{2}\Bigl(\psi^*\frac{\partial\psi}{\partial t}
+                -\frac{\partial\psi^*}{\partial t}\psi\Bigr)
+                -\psi^*\hat H\psi,
+                $$
+                <p>where for $\hat H=-\frac{\hbar^2}{2m}\nabla^2+V(x)$ one writes explicitly
+                </p>
+                $$
+                \mathcal{L}
+                =\frac{\mathrm{i}\hbar}{2}\Bigl(\psi^*\dot\psi-\dot\psi^*\psi\Bigr)
+                -\frac{\hbar^2}{2m}|\nabla\psi|^2-V(x)|\psi|^2,
+                $$
+                <p>after integrating the kinetic term by parts in $x$ (boundary terms vanish for schwartz data).</p>
+                <p><strong>principle of stationary action.</strong> require $\delta S=0$ for independent variations
+                    $\delta\psi,\delta\psi^*$ with fixed values at $t_1,t_2$.</p>
+                <p><strong>computation (euler–lagrange for $\psi^*$).</strong> the variation $\delta\psi^*$ yields
+                </p>
+                $$
+                \delta S
+                =\int_{t_1}^{t_2}\!\int\Bigl(
+                -\frac{\mathrm{i}\hbar}{2}\frac{\partial}{\partial t}(\delta\psi^*)\psi
+                -\frac{\mathrm{i}\hbar}{2}\delta\psi^*\frac{\partial\psi}{\partial t}
+                -\delta\psi^*\hat H\psi
+                \Bigr)\mathrm{d}^nx\,\mathrm{d}t+\text{(t-terms)}.
+                $$
+                <p>integrate $\delta\psi^*$ time derivative by parts in $t$; boundary terms vanish at $t_1,t_2$. the
+                    coefficient of $\delta\psi^*$ inside $(t_1,t_2)$ becomes
+                </p>
+                $$
+                \mathrm{i}\hbar\,\frac{\partial\psi}{\partial t}-\hat H\psi=0.
+                $$
+                <p>the conjugate variation gives the adjoint equation (complex conjugate schrödinger). thus the abstract
+                    dynamics is the euler–lagrange system of a first-order-in-time lagrangian density—deformed from
+                    classical second-order field theories but still variational.</p>
+                <p><strong>remark (path integrals).</strong> composing short-time propagators $\exp(-\mathrm{i}\hat H\,\delta t/\hbar)$
+                    and inserting resolutions of the identity produces formal path-space measures whose stationary phase
+                    in the semiclassical limit ties to classical trajectories; rigorous construction requires extra
+                    analytic structure beyond this page.</p>
+
+                <h3 id="q-wkb-hj">WKB and Hamilton–Jacobi recovery</h3>
+                <p>seek solutions of the time-dependent schrödinger equation in position representation in the form
+                </p>
+                $$
+                \psi(t,x)=A(t,x)\,\exp\!\Bigl(\frac{\mathrm{i}}{\hbar}S(t,x)\Bigr),
+                $$
+                <p>with real amplitude $A&gt;0$ and real phase $S$ (slowly varying in $\hbar$ in the semiclassical sense).
+                    plug into
+                </p>
+                $$
+                \mathrm{i}\hbar\,\frac{\partial\psi}{\partial t}
+                =-\frac{\hbar^2}{2m}\nabla^2\psi+V(x)\psi.
+                $$
+                <p><strong>expansion in $\hbar$.</strong> compute gradients:
+                    $\nabla\psi=(\nabla A+\frac{\mathrm{i}}{\hbar}A\nabla S)\mathrm{e}^{\mathrm{i}S/\hbar}$, and
+                </p>
+                $$
+                \nabla^2\psi
+                =\Bigl(\nabla^2 A+\frac{2\mathrm{i}}{\hbar}\nabla A\cdot\nabla S
+                +\frac{\mathrm{i}}{\hbar}A\nabla^2 S
+                -\frac{1}{\hbar^2}A|\nabla S|^2\Bigr)\mathrm{e}^{\mathrm{i}S/\hbar}.
+                $$
+                <p>collect leading powers of $\hbar$. the terms of order one in the phase (equivalently, the dominant
+                    oscillatory balance between $\mathrm{i}\hbar\,\partial_t\psi$ and the $|\nabla S|^2/\hbar^2$ piece
+                    from $\nabla^2\psi$) yield
+                </p>
+                $$
+                \frac{\partial S}{\partial t}+\frac{1}{2m}|\nabla S|^2+V(x)=0,
+                $$
+                <p>the <strong>hamilton–jacobi equation</strong> for the principal function $S(t,x)$, identical to the
+                    classical generating-function equation for a hamiltonian $H(q,p)=p^2/(2m)+V(q)$ with $p=\nabla S$.</p>
+                <p>the $\mathcal{O}(\hbar^1)$ sector (after extracting the phase) produces a <strong>transport
+                        equation</strong> for $A$ along classical characteristics:
+                </p>
+                $$
+                \frac{\partial A}{\partial t}+\frac{1}{m}\nabla S\cdot\nabla A+\frac{1}{2m}A\nabla^2 S=0,
+                $$
+                <p>which preserves $\int |A|^2\,\mathrm{d}^nx$ compatibly with liouville evolution of probability density
+                    on the lagrangian manifold supporting the wave.</p>
+                <p><strong>interpretation.</strong> classical trajectories are the characteristic curves of the HJ
+                    equation; WKB builds quantum phases whose stationary-phase locus concentrates on those curves as
+                    $\hbar\to 0$. turning points and caustics require connection formulas (airy layers) beyond leading
+                    order—local obstructions parallel to maslov corrections in geometric quantization.</p>
+                <p><strong>boxed leading balance.</strong>
+                </p>
+                $$
+                \boxed{\;
+                \psi\sim A\,\mathrm{e}^{\mathrm{i}S/\hbar},\qquad
+                \partial_t S+\frac{1}{2m}|\nabla S|^2+V=0\quad(\mathcal{O}(\hbar^0))
+                \;}
+                $$
+                <p>this is the explicit bridge from unitary quantum dynamics to the same hamilton–jacobi front the
+                    classical mechanics spine uses for integrable structure and generating functions.</p>
+            </section>
+
+            <section id="arc-symmetries-spin" class="doc-section">
+                <h2>symmetries, angular momentum, spin</h2>
+                <p>classical continuous symmetries on <a href="../classical/index.html#e-noether">phase space</a> generate
+                    conserved quantities via Noether’s story. in quantum mechanics, symmetries are implemented by
+                    (projective) unitary operators; stone’s theorem ties one-parameter groups to self-adjoint generators.
+                    spatial rotations produce the $\mathfrak{so}(3)$ commutator algebra; the universal cover $\mathrm{SU}(2)$
+                    forces half-integer spin and connects to the double-cover story already visible for
+                    <a href="../classical/index.html#c-so3">SO(3) and rigid body</a>.</p>
+
+                <h3 id="q-unitary-symmetry">symmetries as projective unitary representations</h3>
+                <p>wigner’s framework: symmetries are ray maps preserving transition probabilities; they lift to unitary or
+                    antiunitary operators. time-reversal and certain discrete symmetries involve the latter; continuous
+                    connected symmetries are typically unitary.</p>
+
+                <h3 id="q-stone-one-parameter">stone’s theorem and generators</h3>
+                <p>strongly continuous one-parameter unitary groups $U(s)$ have self-adjoint generators $A$ with
+                    $U(s)=\exp(-\mathrm{i}sA/\hbar)$ (conventions vary). this is the quantum replacement for the classical
+                    hamiltonian flow generated by a moment map.</p>
+
+                <h3 id="q-so3-ladder">so(3) algebra, ladders, spectra</h3>
+                <p>components $J_i$ satisfy $[J_i,J_j]=\mathrm{i}\hbar\,\epsilon_{ijk}J_k$. ladder operators raise and
+                    lower $J_z$ eigenvalues; $J^2$ Casimir labels total angular momentum quantum number. the classical
+                    vector $\mathbf{L}=\mathbf{r}\times\mathbf{p}$ obeys the same bracket structure at the Poisson level.</p>
+
+                <h3 id="q-su2-spinors">SU(2) covering SO(3), half-integer spin</h3>
+                <p>projective representations of $\mathrm{SO}(3)$ lift to linear representations of $\mathrm{SU}(2)$.
+                    half-integer spin representations are faithful on $\mathrm{SU}(2)$ but only projective on spatial
+                    rotations, matching the sign ambiguity of spinors under $2\pi$ rotation.</p>
+
+                <h3 id="q-pauli-bloch">Pauli matrices, Bloch sphere, Stern–Gerlach</h3>
+                <p>spin-$\tfrac12$ uses pauli matrices with $[\sigma_j,\sigma_k]=2\mathrm{i}\epsilon_{jkl}\sigma_l$.
+                    pure states form the Bloch sphere; Stern–Gerlach is the two-outcome noncommutative measurement
+                    prototype.</p>
+
+                <h3 id="q-many-body-tensor">tensor products and composite systems</h3>
+                <p>composite systems use $\mathcal{H}_1\otimes\mathcal{H}_2$; entanglement appears as non-factorizable
+                    states. this generalizes classical product configuration spaces
+                    $Q_1\times Q_2$ from <a href="../classical/index.html#smooth-structure">manifold-level
+                        mechanics</a>. identical-particle statistics wait for the field arc.</p>
+            </section>
+
+            <section id="arc-relativistic" class="doc-section">
+                <h2>relativistic extension: Klein–Gordon and Dirac</h2>
+                <p>classical four-momentum lives on minkowski space as in
+                    <a href="../classical/index.html#f-minkowski-particle">flat spacetime kinematics</a>. quantizing the
+                    mass-shell constraint $p_\mu p^\mu=m^2c^2$ yields the Klein–Gordon equation; linearizing in a first-order
+                    way compatible with spin forces the Clifford algebra and the Dirac equation. minimal coupling
+                    $p_\mu\to p_\mu-qA_\mu$ matches the classical gauge minimal coupling from
+                    <a href="../classical/index.html#f-gauge-f">potentials and field strength</a>.</p>
+
+                <h3 id="q-klein-gordon">from mass shell to Klein–Gordon</h3>
+                <p>the scalar wave equation $(\Box+m^2)\phi=0$ follows from promoting $p_\mu$ to operators on spacetime.
+                    negative-frequency modes signal the need for field reinterpretation (particle / antiparticle) and
+                    careful definition of conserved currents.</p>
+
+                <h3 id="q-dirac-clifford">Clifford algebra and Dirac equation</h3>
+                <p>dirac matrices satisfy $\{\gamma^\mu,\gamma^\nu\}=2\eta^{\mu\nu}$. the Dirac operator
+                    $\mathrm{i}\gamma^\mu\partial_\mu-m$ linearizes the KG operator squared. spinor fields carry
+                    representations of $\mathrm{Spin}(1,3)$.</p>
+
+                <h3 id="q-lorentz-minimal-coupling">Lorentz covariance and minimal coupling</h3>
+                <p>covariance fixes the form of couplings to $A_\mu$; nonrelativistic reduction recovers pauli dynamics
+                    with g-factor $2$ at leading order for weak fields. this is the same geometric minimal-coupling story
+                    as classical electrodynamics, now on operator-valued spinors.</p>
+
+                <h3 id="q-antiparticles-fall-center">antiparticles, fall to center, regularity</h3>
+                <p>relativistic coulomb-type problems exhibit regimes where classical singular potentials would collapse;
+                    the quantum field viewpoint regulates behavior via pair creation thresholds and vacuum stability
+                    conditions (landau-level themes, stated here as pointers to Vol. 4 calculations).</p>
+            </section>
+
+            <section id="arc-field-qed" class="doc-section">
+                <h2>field quantization and QED-shaped skeleton</h2>
+                <p>classical fields on spacetime appear as sections and forms in
+                    <a href="../classical/index.html#flat-spacetime-ed">flat spacetime SR and ED</a>; gauge redundancy
+                    and cohomology of $F$ were already <a href="../classical/index.html#f-gauge-f">global issues</a>.
+                    quantization promotes field amplitudes to operator-valued distributions; bosonic commutators and
+                    fermionic anticommutators build Fock space; minimal coupling and interaction picture produce the QED
+                    interaction term; wick contraction and diagrams encode perturbation theory. the
+                    <a href="../classical/index.html#bonus-ehresmann-prelude">Ehresmann connection picture</a> is the
+                    classical geometric spine behind gauge fixing and bundle-level thinking.</p>
+
+                <h3 id="q-ccr-car-fock">CCR, CAR, and Fock space</h3>
+                <p>bosonic modes obey canonical commutation relations; fermionic modes obey anticommutation. Fock space
+                    builds total Hilbert space from one-particle space via symmetrized or antisymmetrized tensor powers,
+                    enforcing bose / fermi statistics algebraically.</p>
+
+                <h3 id="q-ovd-smearing">operator-valued distributions and smearing</h3>
+                <p>fields $\hat\phi(f)$ are defined against test functions $f$ because pointwise multiplication is
+                    ill-defined. this parallels switching from classical smooth fields to distributional sources in maxwell
+                    theory, but now operators replace $c$-numbers.</p>
+
+                <h3 id="q-free-photon-electron">free photon and electron fields</h3>
+                <p>maxwell quantization yields photon creation / annihilation operators in transverse polarizations;
+                    dirac quantization yields electron / positron operators. vacuum choice and normal ordering fix
+                    zero-point subtraction conventions.</p>
+
+                <h3 id="q-qed-gauge-fix">minimal coupling, gauge fixing, QED interaction</h3>
+                <p>the interaction hamiltonian (or lagrangian density) couples $\bar\psi\gamma^\mu\psi$ to $A_\mu$.
+                    gauge fixing (landau, feynman, coulomb) is required for perturbation theory while preserving physical
+                    equivalence classes of observables.</p>
+
+                <h3 id="q-s-matrix">interaction picture and S-matrix (formal)</h3>
+                <p>the dyson series expresses time evolution as time-ordered exponentials of the interaction in the
+                    interaction picture. unitarity of the S-matrix is the formal constraint; IR divergences in massless
+                    theories appear as incompleteness of naive fock space for scattering.</p>
+
+                <h3 id="q-feynman-skeleton">wick, diagrams, UV as residual issue</h3>
+                <p>wick’s theorem reduces time-ordered products to contractions; feynman diagrams bookkeep them. one-loop
+                    divergences preview renormalization: the deformation to noncommutative fields does not by itself fix
+                    short-distance singularities of interaction distributions.</p>
+            </section>
+
+            <section id="arc-geometric-quantization" class="doc-section">
+                <h2>global geometric quantization</h2>
+                <p>when configuration space is not $\mathbb{R}^n$ or when polarizations are twisted, schrödinger
+                    quantization in a single chart fails to be invariant or globally defined. geometric quantization
+                    starts from a symplectic manifold $(M,\omega)$ (think generalized phase space, as in
+                    <a href="../classical/index.html#b-symplectic">symplectic geometry</a> and
+                    <a href="../classical/index.html#geometric-mechanics">geometric mechanics</a>), builds a prequantum
+                    line bundle with curvature $\omega$, imposes integrality tied to
+                    <a href="../classical/index.html#d-closed-exact">cohomological periods</a>, then chooses a
+                    polarization to halve degrees of freedom. bohr–sommerfeld rules reappear as geometric conditions with
+                    maslov corrections, linking to <a href="../classical/index.html#e-hj-integrable">action–angle</a>
+                    classical intuition.</p>
+
+                <h3 id="q-schrodinger-limits">limits of chartwise Schrödinger quantization</h3>
+                <p>ordering ambiguities and lack of canonical transformation equivariance force a coordinate-free
+                    replacement. darboux holds locally, but global topology of $T^*Q$ matters.</p>
+
+                <h3 id="q-prequantum-integrality">prequantum line bundle and integrality</h3>
+                <p>prequantization requires a hermitian line bundle with unitary connection whose curvature is $\omega$.
+                    weil integrality demands $\frac{1}{2\pi\hbar}\int_\Sigma\omega\in\mathbb{Z}$ for closed surfaces
+                    $\Sigma$. this is the geometric origin of quantization of certain classical periods.</p>
+
+                <h3 id="q-polarizations">polarizations and half-form correction</h3>
+                <p>real polarizations (lagrangian foliations) pick position- or momentum-like representations; kähler
+                    polarizations link to holomorphic / bargmann–fock pictures. metaplectic correction adjusts phases and
+                    zero-point shifts (maslov indices).</p>
+
+                <h3 id="q-bohr-sommerfeld">Bohr–Sommerfeld, Maslov, EBK</h3>
+                <p>semiclassical quantization conditions on lagrangian tori combine action integrals with maslov
+                    phases. this closes the loop to integrable classical systems and torus quantization.</p>
+
+                <h3 id="q-dirac-constraints-q">dirac constraints and gauge reduction (pointer)</h3>
+                <p>gauge systems with constraints require dirac quantization or BRST methods; classical constraint
+                    geometry appears in <a href="../classical/index.html#c-frobenius">frobenius and nonholonomic
+                        discussion</a>. full treatment belongs to dedicated field-theory texts.</p>
+            </section>
+
+            <section id="arc-worldsheets" class="doc-section">
+                <h2>complex structures, sigma models, worldsheets</h2>
+                <p>the classical particle action $\int L\,\mathrm{d}t$ on
+                    <a href="../classical/index.html#e-action-manifold">$TQ$</a> generalizes to maps $\Sigma\to X$ from a
+                    worldsheet (or worldline with internal geometry). in $1{+}1$ dimensions, conformal symmetry is
+                    infinite-dimensional; the virasoro algebra is the quantum central extension of conformal killing
+                    symmetries. CFT data (primary fields, OPE, modular $S$-matrix) package operator algebras that replace
+                    hamiltonian time evolution as the organizing principle. this arc is intentionally lean: it shows the
+                    same variational and deformation philosophy applied to worldsheets, not a full string course.</p>
+
+                <h3 id="q-riemann-worldsheet">Riemann surfaces and worldsheet actions</h3>
+                <p>complex coordinates on $\Sigma$ give conformal structure; string and sigma-model actions are
+                    reparametrization invariant with enhanced symmetry in 2D. classical solutions are harmonic maps in
+                    relevant gauges.</p>
+
+                <h3 id="q-conformal-virasoro">conformal symmetry and Virasoro algebra</h3>
+                <p>modes of the stress tensor satisfy $[L_m,L_n]=(m-n)L_{m+n}+\frac{c}{12}m(m^2-1)\delta_{m+n,0}$ with
+                    central charge $c$. the central term is a pure quantum effect breaking naive classical scale symmetry.</p>
+
+                <h3 id="q-cft-oPE-modular">CFT data: OPE, modular invariance (outline)</h3>
+                <p>operator product expansions define short-distance algebra of fields. on a torus, modular invariance of
+                    the partition function constrains spectra; the verlinde formula links fusion to modular matrices
+                    (stated as pointer).</p>
+
+                <h3 id="q-sigma-models">nonlinear sigma models and target geometry</h3>
+                <p>pullback metrics and $B$-fields on the target define couplings on the worldsheet; connections to
+                    geometric quantization of loop spaces appear when one treats boundary conditions and branes (pointer
+                    only).</p>
+            </section>
+
+            <section id="arc-closure" class="doc-section">
+                <h2>interpretation, closure, what this page does not finish</h2>
+                <p>the narrative thread is one deformation of the classical observable algebra, anchored in landau’s
+                    quantum and relativistic volumes, built on the symplectic and variational foundations of the
+                    <a href="../classical/index.html">classical index</a>. the following subsections collect the dictionary
+                    between classical and quantum idioms, state the operational role of operator algebras, and list honest
+                    omissions.</p>
+
+                <h3 id="q-one-deformation-table">one deformation, many faces</h3>
+                <p>poisson bracket becomes commutator; phase-space points become rays or density matrices; liouville
+                    evolution becomes unitary schrödinger evolution; classical superposition of probabilities becomes
+                    interference of amplitudes; sharp trajectories become emergent in WKB / classical limits tied to
+                    <a href="../classical/index.html#e-hj-integrable">hamilton–jacobi</a>.</p>
+
+                <h3 id="q-cstar-operational">operator algebras and the operational core</h3>
+                <p>$C^\ast$-algebraic formulations emphasize that all measurable content lives in expectation values and
+                    spectral measures. this viewpoint unifies finite and infinite systems at the cost of analytic detail
+                    in concrete models.</p>
+
+                <h3 id="q-microlocal-curved">microlocal QFT on curved spacetime (pointer)</h3>
+                <p>on curved lorentzian manifolds, lack of global poincaré symmetry destroys a preferred vacuum; hadamard
+                    states and wavefront-set conditions replace minkowski fock vacuum; stress-energy renormalization feeds
+                    back to geometry. connect to <a href="../classical/index.html#gravity-geometry">classical GR
+                        template</a> as semiclassical target.</p>
+
+                <h3 id="q-rigged-hilbert">rigged Hilbert spaces (pointer)</h3>
+                <p>continuous spectra require rigged hilbert spaces (gelfand triples) to treat generalized eigenvectors
+                    such as plane waves as honest objects paired with test functions.</p>
+
+                <h3 id="q-supersymmetry-pointer">supersymmetry as later graded deformation (pointer)</h3>
+                <p>supersymmetry extends the algebra with odd generators; anticommutators join commutators in the
+                    deformation package; UV cancellations in susy gauge theories are a further layer beyond this page.</p>
+
+                <h3 id="q-out-of-scope">out of scope and next books</h3>
+                <p>this index does not construct interacting QFT rigorously in four dimensions, develop full
+                    renormalization group technology, settle measurement interpretation, or treat lattice gauge theory.
+                    those are the next deformations and readings after landau 3–4 and the geometric supplements sketched
+                    above. when in doubt, return to the classical spine and ask what commutative structure failed, then
+                    promote that failure to a commutator.</p>
+            </section>
+
+        </article>
+
+        <footer class="doc-footer">
+            <p><a href="../">physics</a> · <a href="../classical/">classical physics</a> · $h2$ headings tint
+                <span style="color:var(--link)">purple</span>, $h3$ units tint
+                <span style="color:var(--link-hover)">orange</span>.</p>
+        </footer>
+    </main>
+
+    <script>
+        function jetbundleRenderMath() {
+            if (typeof renderMathInElement === "undefined") return;
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false },
+                    { left: "\\[", right: "\\]", display: true },
+                    { left: "\\(", right: "\\)", display: false }
+                ],
+                throwOnError: false,
+                strict: false
+            });
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        crossorigin="anonymous" onload="jetbundleRenderMath()"></script>
+</body>
+
+</html>
